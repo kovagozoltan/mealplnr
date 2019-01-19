@@ -20,6 +20,7 @@ export class FavouritesComponent implements OnInit {
   showHideAddToDay;
   currentRecipe;
   currentRecipeTitle;
+  currentRecipeIngredientsNumber;
   ingredientToAdd;
   quantityToAdd: Number = 1;
   units;
@@ -45,8 +46,15 @@ export class FavouritesComponent implements OnInit {
         })
       //remove recipe from curent user, that has id of
       this.db.database.ref("/favouriteRecipes").child(this.currentUserID).child(key).remove();
-      //set recipe favourite value to false - so it shows as not in favs in calendar
-      this.db.database.ref("/recipes").child(this.currentUserID).child(key).update({'favourite': false});
+      //check if this recipe exists in calendar
+      this.db.database.ref("/recipes").child(this.currentUserID).child(key).once("value",
+      (snapshot) =>{
+        //if snapshot exists - if recipe exists
+        if(snapshot.exists){
+          //set recipe favourite value to false - so it shows as not in favs in calendar
+          this.db.database.ref("/recipes").child(this.currentUserID).child(key).update({'favourite': false});
+        }
+      })
     }
     this.noteToAdd = null;
   }
@@ -67,11 +75,12 @@ export class FavouritesComponent implements OnInit {
         this.noteToAdd = snapshot.val();
       });
   }
-  showAddToDay(key, recipe) {
+  showAddToDay(key, recipeTitle, ingredientsNumber) {
     this.showHideOverlay = 'show';
     this.showHideAddToDay = 'show';
     this.currentRecipe = key;
-    this.currentRecipeTitle = recipe;
+    this.currentRecipeTitle = recipeTitle;
+    this.currentRecipeIngredientsNumber = ingredientsNumber
   }
   addIngredient(ingredient) {
     if (this.ingredientToAdd && this.ingredientToAdd.length > 0) {
@@ -85,6 +94,12 @@ export class FavouritesComponent implements OnInit {
         'key': key,
         'bought': false
       })
+      this.db.database.ref("/favouriteRecipes").child(this.currentUserID).child(this.currentRecipe).once("value", 
+      (snapshot) => {
+        let value = snapshot.val()['ingredientNumber']
+        value = value + 1;
+        this.db.database.ref("/favouriteRecipes").child(this.currentUserID).child(this.currentRecipe).update({"ingredientNumber": value})
+      })
       this.ingredientToAdd = null;
       this.quantityToAdd = 1;
     }
@@ -97,13 +112,13 @@ export class FavouritesComponent implements OnInit {
     let ref = this.db.database.ref("/recipes").child(this.currentUserID).push();
     let key = ref.key;
     ref.set({
-      'title': this.currentRecipeTitle,
       'day': day,
-      'note': "",
       'favourite': false,
-      'key': key
+      'ingredientNumber': this.currentRecipeIngredientsNumber,
+      'key': key,
+      'note': "",
+      'title': this.currentRecipeTitle
     })
-
     this.db.database.ref("/favouriteIngredients").child(this.currentUserID).orderByChild("recipeId").equalTo(this.currentRecipe).once("value",
       (snapshot) => {
         let tempVar: any = Object.values(snapshot.val())

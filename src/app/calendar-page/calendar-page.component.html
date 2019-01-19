@@ -65,55 +65,50 @@
         <h1 class="font-weight-bold">
           {{recipe.title}}
         </h1>
-        <span class="badge badge-pill badge-danger d-inline-block mr-1" *ngIf="!recipe.ingredientNumber">no ingredients</span>
-        <span class="badge badge-pill badge-primary d-inline-block mr-1" *ngIf="recipe.ingredientNumber">{{recipe.ingredientNumber}} ingredients</span>
-        
-        <span class="badge badge-pill badge-danger d-inline-block mr-1" *ngIf="!recipe.note">no note</span>
-        <span class="badge badge-pill badge-success d-inline-block mr-1" *ngIf="recipe.note">note</span>
+        <span class="badge badge-pill badge-danger text-white d-inline-block mr-1" *ngIf="!recipe.ingredientNumber">no ingredients</span>
+        <span class="badge badge-pill badge-has-content text-white d-inline-block mr-1" *ngIf="recipe.ingredientNumber">{{recipe.ingredientNumber}} ingredients</span>
+        <span class="badge badge-pill badge-danger text-white d-inline-block mr-1" *ngIf="!recipe.note">no note</span>
+        <span class="badge badge-pill badge-has-content text-white d-inline-block mr-1" *ngIf="recipe.note">note</span>
       </div>
       <div class="mealButtons border-left border-secondary bg-white">
         <div class="border-bottom border-secondary text-center" (click)="hideMealMenu[recipe.key] = !hideMealMenu[recipe.key]">
           <span>...</span>
         </div>
-        <div class="text-center" (click)="hideIngredients[recipe.key] = !hideIngredients[recipe.key]">
+        <div class="text-center" (click)="hideIngredients[recipe.key] = !hideIngredients[recipe.key]" [ngClass]="{'rotate': hideIngredients[recipe.key]}">
           <span>&#x25BC;</span>
         </div>
       </div>
 
-
-
-        <div class="mealMenu position-absolute w-100 h-100 bg-white" [hidden]="!hideMealMenu[recipe.key]">
-          <div class="deleteMeal position-relative pt-4" (click)="removeRecipe(recipe.key)">
-            <span class="deleteMealIcon  d-block mx-auto"></span>
-            <span>
-              delete
-            </span>
-          </div>
-          <div class="addNote position-relative pt-4" (click)="showAddNote(recipe.key)">
-            <span class="addNoteIcon d-block mx-auto"></span>
-            <span>
-              note
-            </span>
-          </div>
-          <div class="addToFavourites position-relative pt-4" (click)="addToFavourites(recipe.key)">
-            <span class="addToFavouritesIcon d-block mx-auto" [ngClass]="{'update': recipe.favourite}"></span>
-            <span *ngIf="!recipe.favourite">favourite</span>
-            <span *ngIf="recipe.favourite">update</span>
-          </div>
+      <div class="mealMenu position-absolute w-100 h-100 bg-white" [ngClass]="{'slideIn': hideMealMenu[recipe.key]}">
+        <div class="deleteMeal position-relative pt-4" (click)="removeRecipe(recipe.key)">
+          <span class="deleteMealIcon  d-block mx-auto"></span>
+          <span>
+            delete
+          </span>
         </div>
-
-
+        <div class="addNote position-relative pt-4" (click)="showAddNote(recipe.key)">
+          <span class="addNoteIcon d-block mx-auto"></span>
+          <span>
+            note
+          </span>
+        </div>
+        <div class="addToFavourites position-relative pt-4" (click)="addToFavourites(recipe.key)">
+          <span class="addToFavouritesIcon d-block mx-auto" [ngClass]="{'update': recipe.favourite}"></span>
+          <span *ngIf="!recipe.favourite">favourite</span>
+          <span *ngIf="recipe.favourite">update</span>
+        </div>
+      </div>
 
     </div>
-    <ul class="list-group list-unstyled bg-white text-dark p-3 mx-auto" [hidden]="!hideIngredients[recipe.key]">
+    <ul class="list-group list-unstyled bg-white text-dark mx-auto" [ngClass]="{'slideDown': hideIngredients[recipe.key]}">
       <ng-container *ngFor="let item of myIngredients | async">
-        <li *ngIf="recipe.key == item.recipeId" class="mt-2">
+        <li *ngIf="recipe.key == item.recipeId" class="px-2 mt-2">
           <a class="badge badge-danger text-light" (click)="removeIngredient(item.key, recipe.key)">X</a>&nbsp;
           <span class="ingredient">{{item.title}}</span>&nbsp;&nbsp;
           <span class="units">{{item.quantity}}/{{item.units}}</span>
         </li>
       </ng-container>
-      <span class="badge badge-pill badge-secondary d-inline-block mt-2" (click)="showAddIngredient(recipe.key)">+ add ingredient</span>
+      <span class="badge badge-pill badge-secondary d-inline-block m-3 mt-2" (click)="showAddIngredient(recipe.key)">+ add ingredient</span>
     </ul>
   </li>
 </ul>

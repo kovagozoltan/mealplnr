@@ -130,18 +130,23 @@ export class CalendarPageComponent implements OnInit {
   addToFavourites(key) {
     //show toast message that recipe was added to favs
     this.hideAddToFavsToast = false;
+    //set this recipe favourite to true
     this.db.database.ref("/recipes").child(this.currentUserID).child(key).update({ 'favourite': true })
-
+    //get entire recipe node [child(key)]
     this.db.database.ref("/recipes").child(this.currentUserID).child(key).once("value",
       (snapshot) => {
+        //and set it under favourite recipes
         this.db.database.ref("/favouriteRecipes").child(this.currentUserID).child(key).set(snapshot.val())
       })
-
+    //get all ingredients from shopping list that are associated with this recipe
     this.db.database.ref("/shoppinglist").child(this.currentUserID).orderByChild("recipeId").equalTo(key).once("value",
       (snapshot) => {
+        //if snapshot doesn't exist - if there are no ingredients to add to favourite ingredients
+        if(snapshot.exists()){
+        //and add them under favourite ingredients:
         this.db.database.ref("/favouriteIngredients").child(this.currentUserID).update(snapshot.val())
+        }
       })
-
     //after 3 secs, hide toast message
     setTimeout(() => {
       this.hideAddToFavsToast = true;
