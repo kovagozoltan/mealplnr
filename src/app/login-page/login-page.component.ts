@@ -41,8 +41,6 @@ export class LoginPageComponent implements OnInit {
     })
     .catch(err =>{
       this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
-      console.log("message from login component: " + err.code.split("/")[1].trim())
-      console.log(err.message)
     })
   }
 
@@ -53,8 +51,6 @@ export class LoginPageComponent implements OnInit {
     })
     .catch(err =>{
       this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
-      console.log("message from login component: " + err.code.split("/")[1].trim())
-      console.log(err.message)
     })
   }
   

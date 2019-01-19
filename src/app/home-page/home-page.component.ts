@@ -16,18 +16,13 @@ export class HomePageComponent implements OnInit {
   displayName; //display name of user - from google account
   photoUrl; //user profile photo - from google account
   currentUserID; //user id
-  // itemToAdd;  
-  // quantityToAdd:Number = 1;
-  // myList: Observable<any>;
-  
 
   constructor(private authService: AuthService, private router: Router, public db: AngularFireDatabase) { }
 
   ngOnInit() {
     // this.displayName = localStorage.getItem('displayName')
     // this.photoUrl = localStorage.getItem('photoUrl')
-    // this.currentUserID = localStorage.getItem('currentUserID')
-    
+    this.currentUserID = localStorage.getItem('currentUserID')  
   }
   logout(){
     this.authService.logout();

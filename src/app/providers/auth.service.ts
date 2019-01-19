@@ -22,11 +22,9 @@ export class AuthService {
     return new Promise<any>((resolve, reject) => {
       let provider = new firebase.auth.GoogleAuthProvider();
       // force acount selection on login
-
       // provider.setCustomParameters({
       //   prompt: 'select_account'
       // });
-
       provider.addScope('profile');
       provider.addScope('email');
       this.af.auth
@@ -38,15 +36,6 @@ export class AuthService {
       this.myAuthState = this.af.authState.subscribe(user => {
         if (user) {
           this.currentUserID = this.af.auth.currentUser.uid;
-          this.db.database.ref("/users").orderByKey().equalTo(this.currentUserID).once("value",
-            (snapshot) => {
-              if (!snapshot.val()) {
-                this.db.database.ref("/users").child(this.currentUserID).set({ 'displayName': user.displayName, 'email': user.email })
-              };
-            });
-
-          localStorage.setItem('displayName', user.displayName);
-          localStorage.setItem('photoUrl', user.photoURL);
           localStorage.setItem('currentUserID', this.currentUserID);
         };
       });
@@ -63,21 +52,36 @@ export class AuthService {
         }, err => {
           console.log(err);
           reject(err);
-        })
-    })
+        });
+
+        this.myAuthState = this.af.authState.subscribe(user => {
+          if (user) {
+            this.currentUserID = this.af.auth.currentUser.uid;
+            localStorage.setItem('currentUserID', this.currentUserID);
+          };
+        });
+
+    });
   }
   doEmailSignup(email: string, password: string) {
+    this.myAuthState = this.af.authState.subscribe(user => {
+      if (user) {
+        this.currentUserID = this.af.auth.currentUser.uid;
+        localStorage.setItem('currentUserID', this.currentUserID);
+      };
+    });
     return this.af.auth
       .createUserWithEmailAndPassword(email, password)
   }
   doEmailLogin(email: string, password: string) {
+    this.myAuthState = this.af.authState.subscribe(user => {
+      if (user) {
+        this.currentUserID = this.af.auth.currentUser.uid;
+        localStorage.setItem('currentUserID', this.currentUserID);
+      };
+    });
     return this.af.auth
       .signInWithEmailAndPassword(email, password)
-      // .then(value => {
-      // })
-      // .catch(err => {
-      //   console.log('Something went wrong:', err.message);
-      // }) 
   }
 
   logout() {
