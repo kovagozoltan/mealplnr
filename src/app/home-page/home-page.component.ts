@@ -18,13 +18,16 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() {
     this.currentUserID = localStorage.getItem('currentUserID')
+    console.log("currentUserID: " + this.currentUserID)
     //check /plans if currentUserID exist
     this.db.database.ref("/plans").child(this.currentUserID).once("value",
     (snapshot) =>{
+      console.log(snapshot.val())
       //if it doesn't exist, push a node containing currentUserId
       //and a random key - the push key
       //this will be the unique id of the plan
-      if(!snapshot.exists){
+      if(!snapshot.val()){
+        console.log("userID doesn't exist under plans")
         let ref = this.db.database.ref("/plans").child(this.currentUserID).push();
         let key = ref.key;
         ref.set({

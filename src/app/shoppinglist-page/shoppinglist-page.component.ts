@@ -10,6 +10,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 export class ShoppinglistPageComponent implements OnInit {
 
   currentUserID;
+  currentPlan;
   myIngredients;
   showHideOverlay;
   ingredientToAdd;
@@ -20,18 +21,25 @@ export class ShoppinglistPageComponent implements OnInit {
 
   ngOnInit() {
     this.currentUserID = localStorage.getItem('currentUserID');
-    //this.myIngredients = this.db.list("/shoppinglist/"+this.currentUserID).valueChanges()
-    this.myIngredients = this.db.list("/shoppinglist/"+this.currentUserID, ref => {
-      let q = ref.orderByChild('title')
-      return q;
-    }).valueChanges()
+    //set currentPlan to the key that was generated in home component
+    //on first login
+    this.db.database.ref("/plans").child(this.currentUserID).orderByChild("user").equalTo(this.currentUserID).once("value", 
+    (snapshot) =>{
+      snapshot.forEach(childSnapshot =>{
+        this.currentPlan = childSnapshot.val()['key']
+      })
+      this.myIngredients = this.db.list("/shoppinglist/" + this.currentPlan, ref => {
+        let q = ref.orderByChild('title')
+        return q;
+      }).valueChanges()
+    })
   }
   changeBoughtStatus(item, bought){
     let boughtStatus = !bought;
-    this.db.database.ref("/shoppinglist").child(this.currentUserID).child(item).update({'bought': boughtStatus});
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(item).update({'bought': boughtStatus});
   }
   removeIngredient(key){
-    this.db.database.ref("/shoppinglist").child(this.currentUserID).child(key).ref.remove()
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(key).ref.remove()
   }
   showAddIngredient(){
     this.showHideOverlay = 'show';
@@ -39,7 +47,7 @@ export class ShoppinglistPageComponent implements OnInit {
   addIngredient(){
     if(this.ingredientToAdd && this.ingredientToAdd.length > 0){
       
-      let ref = this.db.database.ref("/shoppinglist").child(this.currentUserID).push()
+      let ref = this.db.database.ref("/shoppinglist").child(this.currentPlan).push()
       let key = ref.key;
       ref.set({
         'title': this.ingredientToAdd,

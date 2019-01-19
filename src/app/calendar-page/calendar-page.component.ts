@@ -36,30 +36,26 @@ export class CalendarPageComponent implements OnInit {
     //get currentUserID from local storage
     //it was set in auth service
     this.currentUserID = localStorage.getItem('currentUserID');
-
     //set currentPlan to the key that was generated in home component
     //on first login
     this.db.database.ref("/plans").child(this.currentUserID).orderByChild("user").equalTo(this.currentUserID).once("value", 
     (snapshot) =>{
       snapshot.forEach(childSnapshot =>{
-        this.currentPlan = JSON.stringify(childSnapshot.val()['key'])
+        this.currentPlan = childSnapshot.val()['key']
       })
-      console.log("currentPlan: " + this.currentPlan);
+      this.currentDay = 'monday';
+      this.myIngredients = this.db.list("/shoppinglist/" + this.currentPlan).valueChanges()
+      this.myRecipes = this.db.list('/recipes/' + this.currentPlan, ref => {
+        // filter ref here ex: orderByChild(X).equalTo(Y)
+        let q = ref.orderByChild("day").equalTo(this.currentDay);
+        return q;
+      }).valueChanges();
     })
-
-
-    this.currentDay = 'monday';
-    this.myIngredients = this.db.list("/shoppinglist/" + this.currentUserID).valueChanges()
-    this.myRecipes = this.db.list('/recipes/' + this.currentUserID, ref => {
-      // filter ref here ex: orderByChild(X).equalTo(Y)
-      let q = ref.orderByChild("day").equalTo(this.currentDay);
-      return q;
-    }).valueChanges();
   }
   getRecipes(day) {
     this.currentDay = day;
-    this.myIngredients = this.db.list("/shoppinglist/" + this.currentUserID).valueChanges()
-    this.myRecipes = this.db.list('/recipes/' + this.currentUserID, ref => {
+    this.myIngredients = this.db.list("/shoppinglist/" + this.currentPlan ).valueChanges()
+    this.myRecipes = this.db.list('/recipes/' + this.currentPlan, ref => {
       // filter ref here ex: orderByChild(X).equalTo(Y)
       let q = ref.orderByChild("day").equalTo(day);
       return q;
@@ -67,7 +63,7 @@ export class CalendarPageComponent implements OnInit {
   }
   addRecipe() {
     if (this.recipeToAdd && this.recipeToAdd.length > 0) {
-      let ref = this.db.database.ref("/recipes").child(this.currentUserID).push();
+      let ref = this.db.database.ref("/recipes").child(this.currentPlan).push();
       let key = ref.key;
       ref.set({
         'title': this.recipeToAdd,
@@ -82,12 +78,12 @@ export class CalendarPageComponent implements OnInit {
   }
   removeRecipe(key) {
     // remove recipe from curent user, that has id of
-    this.db.database.ref("/recipes").child(this.currentUserID).child(key).remove();
+    this.db.database.ref("/recipes").child(this.currentPlan).child(key).remove();
     // remove ingredient from shopping list, from current user that matches the recipe removed ^^
-    this.db.database.ref("/shoppinglist").child(this.currentUserID).orderByChild('recipeId').equalTo(key).once("value",
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).orderByChild('recipeId').equalTo(key).once("value",
       (snapshot) => {
         snapshot.forEach((childSnapshot) => {
-          this.db.database.ref("/shoppinglist").child(this.currentUserID).child(childSnapshot.key).ref.remove()
+          this.db.database.ref("/shoppinglist").child(this.currentPlan).child(childSnapshot.key).ref.remove()
         })
       })
     this.noteToAdd = null;
@@ -101,7 +97,7 @@ export class CalendarPageComponent implements OnInit {
     this.showHideOverlay = 'show';
     this.showHideAddNote = 'show';
     this.currentRecipe = key;
-    this.db.database.ref("/recipes").child(this.currentUserID).child(key).child("note").once("value",
+    this.db.database.ref("/recipes").child(this.currentPlan).child(key).child("note").once("value",
       (snapshot) => {
         this.noteToAdd = snapshot.val();
       });
@@ -109,7 +105,7 @@ export class CalendarPageComponent implements OnInit {
   addIngredient(ingredient) {
     if (this.ingredientToAdd && this.ingredientToAdd.length > 0) {
 
-      let ref = this.db.database.ref("/shoppinglist").child(this.currentUserID).push()
+      let ref = this.db.database.ref("/shoppinglist").child(this.currentPlan).push()
       let key = ref.key;
       ref.set({
         'title': this.ingredientToAdd,
@@ -119,46 +115,46 @@ export class CalendarPageComponent implements OnInit {
         'key': key,
         'bought': false
       })
-      this.db.database.ref("/recipes").child(this.currentUserID).child(this.currentRecipe).once("value", 
+      this.db.database.ref("/recipes").child(this.currentPlan).child(this.currentRecipe).once("value", 
       (snapshot) => {
         let value = snapshot.val()['ingredientNumber']
         value = value + 1;
-        this.db.database.ref("/recipes").child(this.currentUserID).child(this.currentRecipe).update({"ingredientNumber": value})
+        this.db.database.ref("/recipes").child(this.currentPlan).child(this.currentRecipe).update({"ingredientNumber": value})
       })
       this.ingredientToAdd = null;
       this.quantityToAdd = 1;
     }
   }
   addNote(note) {
-    let ref = this.db.database.ref("/recipes").child(this.currentUserID).child(this.currentRecipe).update({ 'note': note })
+    let ref = this.db.database.ref("/recipes").child(this.currentPlan).child(this.currentRecipe).update({ 'note': note })
   }
   removeIngredient(itemKey, recipeKey) {
-    this.db.database.ref("/shoppinglist").child(this.currentUserID).child(itemKey).ref.remove()
-    this.db.database.ref("/recipes").child(this.currentUserID).child(recipeKey).once("value", 
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(itemKey).ref.remove()
+    this.db.database.ref("/recipes").child(this.currentPlan).child(recipeKey).once("value", 
     (snapshot) => {
       let value = snapshot.val()['ingredientNumber']
       value = value - 1;
-      this.db.database.ref("/recipes").child(this.currentUserID).child(recipeKey).update({"ingredientNumber": value})
+      this.db.database.ref("/recipes").child(this.currentPlan).child(recipeKey).update({"ingredientNumber": value})
     })
   }
   addToFavourites(key) {
     //show toast message that recipe was added to favs
     this.hideAddToFavsToast = false;
     //set this recipe favourite to true
-    this.db.database.ref("/recipes").child(this.currentUserID).child(key).update({ 'favourite': true })
+    this.db.database.ref("/recipes").child(this.currentPlan).child(key).update({ 'favourite': true })
     //get entire recipe node [child(key)]
-    this.db.database.ref("/recipes").child(this.currentUserID).child(key).once("value",
+    this.db.database.ref("/recipes").child(this.currentPlan).child(key).once("value",
       (snapshot) => {
         //and set it under favourite recipes
-        this.db.database.ref("/favouriteRecipes").child(this.currentUserID).child(key).set(snapshot.val())
+        this.db.database.ref("/favouriteRecipes").child(this.currentPlan).child(key).set(snapshot.val())
       })
     //get all ingredients from shopping list that are associated with this recipe
-    this.db.database.ref("/shoppinglist").child(this.currentUserID).orderByChild("recipeId").equalTo(key).once("value",
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).orderByChild("recipeId").equalTo(key).once("value",
       (snapshot) => {
         //if snapshot doesn't exist - if there are no ingredients to add to favourite ingredients
         if(snapshot.exists()){
         //and add them under favourite ingredients:
-        this.db.database.ref("/favouriteIngredients").child(this.currentUserID).update(snapshot.val())
+        this.db.database.ref("/favouriteIngredients").child(this.currentPlan).update(snapshot.val())
         }
       })
     //after 3 secs, hide toast message
