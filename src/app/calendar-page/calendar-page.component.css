@@ -1,0 +1,159 @@
+#overlay{
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 99; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+.card {
+    display: none;
+    top: 25%;
+    z-index: 100;
+    left: 0;
+    width: 250px;
+    right: 0;
+    height: 200px;
+    border-radius: 15px;
+    color: black;
+    font-weight: 400;
+}
+.card p {
+    background: #ed213a;
+    background: linear-gradient(135deg, #ed213a 0%,#d70923 100%);
+    margin: 0 0 20px 0;
+    padding: 0;
+    border-radius: 15px 15px 0 0;
+    color: white;
+    font-size: 1.3em;
+    font-weight: 500;
+}
+textarea {
+    width: 90%;
+    height: 50%;
+}
+#favouritesToast {
+    top: 40%;
+    z-index: 100;
+}
+
+
+
+#topMenu{
+    background: #ed213a; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #ed213a 0%, #d70923 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #ed213a 0%,#d70923 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #ed213a 0%,#d70923 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ed213a', endColorstr='#d70923',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+#topMenu > div a{
+    font-size: 1.3em;
+    font-weight: bold;
+    font-size: 1em;
+}
+#topMenu .selectedDay{
+    color: #d70923;
+    background-color: white;
+    border-radius: 20px;
+}
+#topMenu > a.btn {
+    color: white;
+}
+#weeklyplan{
+    background-image: url("../assets/img/calendar.png");
+    width: 110px;
+    padding-left: 25px;
+    margin-right: 5px;
+    margin-top: 5px;
+    height: 20px;
+    right: 0;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.list-group .list-group-item {
+    background: transparent;
+}
+.list-group .list-group-item > div{
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 95%;
+    border-radius: 15px;
+    color: #cd0a21;
+    -webkit-box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.2);
+}
+
+
+.list-group .list-group {
+    width: 85%;
+}
+.list-group .list-group .ingredient{
+    font-weight: 600;
+}
+.list-group .list-group .units{
+    float:right;
+}
+.list-group h1{
+    font-size: 1.2em;
+}
+.list-group .mealButtons{
+    position: absolute;
+    height: 100%;
+    width: 50px;
+    right: 0;
+    top: 0;
+    border-radius: 0 15px 15px 0;
+    z-index: 2;
+}
+.mealButtons .border-bottom.border-secondary{
+    width: 100%;
+    height: 50%;
+    border-radius: 0 15px 0 0;
+    
+}
+.mealButtons .border-bottom.border-secondary.text-center span{
+    font-size: 3em;
+    line-height: 0.2em;
+}
+.mealButtons .text-center span{
+    font-size: 1.5em;
+}
+.mealMenu{
+    top: 0;
+    left: 0;
+    border-radius: 15px;
+
+    padding-right: 60px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.deleteMeal, .addNote, .addToFavourites{
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+}
+.deleteMealIcon, .addNoteIcon, .addToFavouritesIcon {
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30%;
+    height: 40%;
+}
+.deleteMealIcon{
+    background-image: url("../assets/img/delete.png");
+}
+.addNoteIcon{
+    background-image: url("../assets/img/note.png");
+}
+.addToFavouritesIcon{
+    background-image: url("../assets/img/star_empty.png");
+}
+.addToFavouritesIcon.update{
+    background-image: url("../assets/img/star_full.png");
+}

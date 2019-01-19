@@ -1,0 +1,68 @@
+#overlay{
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 99; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+.card {
+    display: none;
+    top: 25%;
+    z-index: 100;
+    left: 0;
+    width: 250px;
+    right: 0;
+    height: 200px;
+    border-radius: 15px;
+    color: black;
+    font-weight: 400;
+}
+.card p {
+    background: #ed213a;
+    background: linear-gradient(135deg, #ed213a 0%,#d70923 100%);
+    margin: 0 0 20px 0;
+    padding: 0;
+    border-radius: 15px 15px 0 0;
+    color: white;
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+#topMenu{
+    background: #ed213a; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #ed213a 0%, #d70923 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #ed213a 0%,#d70923 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #ed213a 0%,#d70923 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ed213a', endColorstr='#d70923',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+#topMenu > div a{
+    font-size: 1.3em;
+    font-weight: bold;
+    font-size: 1em;
+}
+#topMenu > a.btn {
+    color: white;
+}
+#shoppingList{
+    background-image: url("../assets/img/shopping.png");
+    width: 120px;
+    padding-left: 25px;
+    margin-right: 5px;
+    margin-top: 5px;
+    height: 20px;
+    right: 0;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.list-group .ingredient{
+    font-weight: 600;
+}
+.list-group .units{
+    float:right;
+}

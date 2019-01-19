@@ -1,0 +1,45 @@
+#background{
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background: #ed213a; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #ed213a 0%, #d70923 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #ed213a 0%,#d70923 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #ed213a 0%,#d70923 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ed213a', endColorstr='#d70923',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#content{
+    height: 100vh;
+    border: 3px;
+    box-sizing: border-box;
+}
+#com{
+    font-size: 0.35em;
+}
+#plnr{
+    letter-spacing: 0.05em;
+    margin-left: -0.05em;
+}
+#meal{
+    letter-spacing: 0.18em;
+    padding-left: 0.15em;
+}
+#content h1{
+    line-height: 0.8em;
+    padding-top: 30vh;
+}
+.loginButton {
+    background: transparent;
+    border-radius: 20px;
+    width: 100px;
+    height: 20px;
+    font-size: 0.7em;
+    line-height: 0.7em;
+}
+.loginButton.first {
+    margin-top: 165px;
+}

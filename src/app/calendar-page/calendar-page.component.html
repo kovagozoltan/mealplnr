@@ -1,0 +1,127 @@
+<div id="overlay" class="h-100 w-100 text-center" [ngClass]="{'d-flex': showHideOverlay == 'show'}" (click)="showHideOverlay = none; showHideAddIngredient = none; showHideAddNote = none">
+</div>
+<p id="favouritesToast" class="position-absolute bg-success w-100 text-center" [class.d-none]="hideAddToFavsToast">recipe added to favourites</p>
+<div class="card mx-auto position-absolute text-center" [ngClass]="{'d-inline': showHideAddIngredient == 'show'}">
+  <p>Add ingredient</p>
+  <input [(ngModel)]="ingredientToAdd" placeholder="ingredient" class="mb-1 text-center">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="units" id="option1" autocomplete="off" value="grams" [(ngModel)]="units"
+      required>
+    <label class="form-check-label" for="option1">grams</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="units" id="option2" autocomplete="off" value="liters" [(ngModel)]="units">
+    <label class="form-check-label" for="option2">liters</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="units" id="option3" autocomplete="off" value="pieces" [(ngModel)]="units">
+    <label class="form-check-label" for="option3">pieces</label>
+  </div>
+  <input [(ngModel)]="quantityToAdd" placeholder="quantity" class="mt-1 text-center" type="number" max="999">
+  <br>
+  <button (click)="addIngredient(ingredientToAdd)" class="mt-2 btn btn-success">add</button>
+</div>
+
+<div class="card mx-auto position-absolute text-center" [ngClass]="{'d-inline': showHideAddNote == 'show'}">
+  <p>Add note</p>
+  <textarea [(ngModel)]="noteToAdd" placeholder="type your note here.." class="text-center"></textarea>
+  <br>
+  <button (click)="addNote(noteToAdd)" class="btn btn-success">add</button>
+</div>
+
+<div id="topMenu" class="pb-2">
+  <a class="btn btn-sm" routerLink="">
+    <back</a>
+      <span id="weeklyplan">weekly plan</span>
+      <div class="row mt-4 mx-3 text-center">
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'monday'}">
+          <a (click)="getRecipes('monday')">M</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'tuesday'}">
+          <a (click)="getRecipes('tuesday')">T</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'wednesday'}">
+          <a (click)="getRecipes('wednesday')">W</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'thursday'}">
+          <a (click)="getRecipes('thursday')">Th</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'friday'}">
+          <a (click)="getRecipes('friday')">F</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'satruday'}">
+          <a (click)="getRecipes('satruday')">S</a>
+        </div>
+        <div class="col px-1" [ngClass]="{'selectedDay': currentDay == 'sunday'}">
+          <a (click)="getRecipes('sunday')">Su</a>
+        </div>
+      </div>
+</div>
+
+<ul class="list-group">
+  <li *ngFor="let recipe of myRecipes | async" class="list-group-item row m-0 p-0 border-0">
+    <div class="bg-white position-relative">
+      <div class="d-inline-block m-3">
+        <h1 class="font-weight-bold">
+          {{recipe.title}}
+        </h1>
+        <span class="badge badge-pill badge-danger d-inline-block mr-1" *ngIf="!recipe.ingredientNumber">no ingredients</span>
+        <span class="badge badge-pill badge-primary d-inline-block mr-1" *ngIf="recipe.ingredientNumber">{{recipe.ingredientNumber}} ingredients</span>
+        
+        <span class="badge badge-pill badge-danger d-inline-block mr-1" *ngIf="!recipe.note">no note</span>
+        <span class="badge badge-pill badge-success d-inline-block mr-1" *ngIf="recipe.note">note</span>
+      </div>
+      <div class="mealButtons border-left border-secondary bg-white">
+        <div class="border-bottom border-secondary text-center" (click)="hideMealMenu[recipe.key] = !hideMealMenu[recipe.key]">
+          <span>...</span>
+        </div>
+        <div class="text-center" (click)="hideIngredients[recipe.key] = !hideIngredients[recipe.key]">
+          <span>&#x25BC;</span>
+        </div>
+      </div>
+
+
+
+        <div class="mealMenu position-absolute w-100 h-100 bg-white" [hidden]="!hideMealMenu[recipe.key]">
+          <div class="deleteMeal position-relative pt-4" (click)="removeRecipe(recipe.key)">
+            <span class="deleteMealIcon  d-block mx-auto"></span>
+            <span>
+              delete
+            </span>
+          </div>
+          <div class="addNote position-relative pt-4" (click)="showAddNote(recipe.key)">
+            <span class="addNoteIcon d-block mx-auto"></span>
+            <span>
+              note
+            </span>
+          </div>
+          <div class="addToFavourites position-relative pt-4" (click)="addToFavourites(recipe.key)">
+            <span class="addToFavouritesIcon d-block mx-auto" [ngClass]="{'update': recipe.favourite}"></span>
+            <span *ngIf="!recipe.favourite">favourite</span>
+            <span *ngIf="recipe.favourite">update</span>
+          </div>
+        </div>
+
+
+
+    </div>
+    <ul class="list-group list-unstyled bg-white text-dark p-3 mx-auto" [hidden]="!hideIngredients[recipe.key]">
+      <ng-container *ngFor="let item of myIngredients | async">
+        <li *ngIf="recipe.key == item.recipeId" class="mt-2">
+          <a class="badge badge-danger text-light" (click)="removeIngredient(item.key, recipe.key)">X</a>&nbsp;
+          <span class="ingredient">{{item.title}}</span>&nbsp;&nbsp;
+          <span class="units">{{item.quantity}}/{{item.units}}</span>
+        </li>
+      </ng-container>
+      <span class="badge badge-pill badge-secondary d-inline-block mt-2" (click)="showAddIngredient(recipe.key)">+ add ingredient</span>
+    </ul>
+  </li>
+</ul>
+
+<div class="input-group my-3 px-3">
+  <input [(ngModel)]="recipeToAdd" type="text" class="form-control" placeholder="Add a meal to plan" aria-label="Add a meal to plan"
+    aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <button class="btn btn btn-secondary" type="button" (click)="addRecipe()">Add</button>
+  </div>
+</div>
