@@ -12,17 +12,27 @@ import { Observable } from "rxjs";
 })
 export class HomePageComponent implements OnInit {
 
-
-  displayName; //display name of user - from google account
-  photoUrl; //user profile photo - from google account
   currentUserID; //user id
 
   constructor(private authService: AuthService, private router: Router, public db: AngularFireDatabase) { }
 
   ngOnInit() {
-    // this.displayName = localStorage.getItem('displayName')
-    // this.photoUrl = localStorage.getItem('photoUrl')
-    this.currentUserID = localStorage.getItem('currentUserID')  
+    this.currentUserID = localStorage.getItem('currentUserID')
+    //check /plans if currentUserID exist
+    this.db.database.ref("/plans").child(this.currentUserID).once("value",
+    (snapshot) =>{
+      //if it doesn't exist, push a node containing currentUserId
+      //and a random key - the push key
+      //this will be the unique id of the plan
+      if(!snapshot.exists){
+        let ref = this.db.database.ref("/plans").child(this.currentUserID).push();
+        let key = ref.key;
+        ref.set({
+          'user': this.currentUserID,
+          'key': key
+        })
+      }
+    })
   }
   logout(){
     this.authService.logout();

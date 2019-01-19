@@ -12,8 +12,9 @@ export class CalendarPageComponent implements OnInit {
 
   myRecipes: Observable<any>;
   myIngredients;
-  currentUserID;
+  currentUserID; // current user id
   currentDay;
+  currentPlan;
   recipeToAdd;
   quantityToAdd: Number = 1;
   units;
@@ -25,15 +26,28 @@ export class CalendarPageComponent implements OnInit {
   noteToAdd;
   currentRecipe;
   daysWithRecipes: any = [];
-  
-  
+
   hideIngredients:any = {};
   hideMealMenu:any = {};
 
   constructor(private authService: AuthService, public db: AngularFireDatabase) { }
 
   ngOnInit() {
+    //get currentUserID from local storage
+    //it was set in auth service
     this.currentUserID = localStorage.getItem('currentUserID');
+
+    //set currentPlan to the key that was generated in home component
+    //on first login
+    this.db.database.ref("/plans").child(this.currentUserID).orderByChild("user").equalTo(this.currentUserID).once("value", 
+    (snapshot) =>{
+      snapshot.forEach(childSnapshot =>{
+        this.currentPlan = JSON.stringify(childSnapshot.val()['key'])
+      })
+      console.log("currentPlan: " + this.currentPlan);
+    })
+
+
     this.currentDay = 'monday';
     this.myIngredients = this.db.list("/shoppinglist/" + this.currentUserID).valueChanges()
     this.myRecipes = this.db.list('/recipes/' + this.currentUserID, ref => {
