@@ -14,8 +14,9 @@ export class LoginPageComponent implements OnInit {
   //for login and signup
   email: string;
   password: string;
+  confirmPassword: string;
 
-  errorMessage : string;
+  errorMessage: string;
 
   constructor(public authService: AuthService, private router: Router) { }
 
@@ -35,23 +36,35 @@ export class LoginPageComponent implements OnInit {
     })
   }
   emailSignup() {
-    this.authService.doEmailSignup(this.email, this.password)
-    .then(value => {
-      this.email = this.password = '';
-    })
-    .catch(err =>{
-      this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
-    })
+    if (this.password === this.confirmPassword) {
+      this.authService.doEmailSignup(this.email, this.password)
+        .then(value => {
+          this.email = this.password = '';
+        })
+        .catch(err => {
+          this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
+        })
+    } else {
+      this.errorMessage = "passwords don't match"
+    }
   }
-
   emailLogin() {
     this.authService.doEmailLogin(this.email, this.password)
+      .then(value => {
+        this.email = this.password = '';
+      })
+      .catch(err => {
+        this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
+      })
+  }
+  passwordReset(){
+    this.authService.doPasswordReset(this.email)
     .then(value => {
-      this.email = this.password = '';
+      this.email = '';
+      this.errorMessage = "email sent!"
     })
-    .catch(err =>{
+    .catch(err => {
       this.errorMessage = err.code.split("/")[1].replace(/-/g, " ").trim();
     })
   }
-  
 }

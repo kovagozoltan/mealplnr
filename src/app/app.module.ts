@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -16,6 +16,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { CalendarPageComponent } from './calendar-page/calendar-page.component';
 import { ShoppinglistPageComponent } from './shoppinglist-page/shoppinglist-page.component';
 import { FavouritesComponent } from './favourites/favourites.component';
+import { InviteComponent } from './invite/invite.component';
 
 import { RouterModule, Routes } from '@angular/router';
 
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path: 'login', component: LoginPageComponent},
   {path: 'calendar', component: CalendarPageComponent},
   {path: 'shoppinglist', component: ShoppinglistPageComponent},
-  {path: 'favourites', component: FavouritesComponent}
+  {path: 'favourites', component: FavouritesComponent},
+  {path: 'invite', component: InviteComponent}
 ]
 
 @NgModule({
@@ -34,7 +36,8 @@ const routes: Routes = [
     HomePageComponent,
     CalendarPageComponent,
     ShoppinglistPageComponent,
-    FavouritesComponent
+    FavouritesComponent,
+    InviteComponent
   ],
   imports: [
     FormsModule,
@@ -45,7 +48,10 @@ const routes: Routes = [
     AngularFireAuthModule,
     AngularFireDatabaseModule
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

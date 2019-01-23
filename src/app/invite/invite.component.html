@@ -1,0 +1,23 @@
+<div id="background">
+</div>
+<div id="topMenu" class="pb-4">
+  <a class="btn btn-sm" routerLink="">
+    <back</a>
+</div>
+<p class="text-center pt-4">You can invite someone to share your meal plan. Once they accept the invitation, they can add, delete, or modify all meals
+  and/or ingredients within your meal plan.
+</p>
+<div class="text-center position-relative">
+  <input [(ngModel)]='userEmail' class="d-block mx-auto">
+  <p class="position-absolute w-100 text-center text-danger small">{{errorMessage}}</p>
+  <button (click)="invite(userEmail)" class="btn btn-sm btn-outline-light mt-4" placeholder="users email">invite</button>
+</div>
+<br>
+<p>my invitations:</p>
+
+<ul class="list-group">
+  <li *ngFor="let invitation of myInvitations | async">
+    From: {{invitation.from}}
+    <button (click)="acceptInvitation(invitation.key)" class="btn btn-sm btn-outline-light">accept</button>
+  </li>
+</ul>
