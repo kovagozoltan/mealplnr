@@ -16,9 +16,10 @@ export class ShoppinglistPageComponent implements OnInit {
   ingredientToAdd;
   quantityToAdd;
   units;
+  filterBy;
 
   constructor(private authService: AuthService, public db: AngularFireDatabase) { }
-
+ 
   ngOnInit() {
     this.currentUserID = localStorage.getItem('currentUserID');
     //set currentPlan to the key that was generated in home component

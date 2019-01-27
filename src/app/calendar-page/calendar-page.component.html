@@ -103,8 +103,11 @@
     <ul class="list-group list-unstyled bg-white text-dark mx-auto" [ngClass]="{'slideDown': hideIngredients[recipe.key]}">
       <ng-container *ngFor="let item of myIngredients | async">
         <li *ngIf="recipe.key == item.recipeId" class="px-2 mt-2">
-          <a class="badge badge-danger text-light" (click)="removeIngredient(item.key, recipe.key)">X</a>&nbsp;
-          <span class="ingredient">{{item.title}}</span>&nbsp;&nbsp;
+          <div>
+            <a class="badge badge-danger text-light" (click)="removeIngredient(item.key, recipe.key)">X</a>&nbsp;
+            <span class="ingredient d-inline-block">{{item.title}}</span>
+          </div>
+          <a class="badge badge-info" (click)="needToBuy(item.key)">need to buy</a>
           <span class="units">{{item.quantity}}/{{item.units}}</span>
         </li>
       </ng-container>

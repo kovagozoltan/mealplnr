@@ -26,16 +26,18 @@
     <back</a>
       <span id="shoppingList">shopping list</span>
 </div>
-<ul class="list-group list-unstyled bg-white text-dark mx-auto" *ngFor="let item of myIngredients | async">
-  <li class="list-group-item" [ngClass]="{'list-group-item-success': item.bought}">
-    <a class="badge badge-danger text-light" (click)="removeIngredient(item.key)">X</a>&nbsp;
-    <span class="ingredient">{{item.title}}</span>&nbsp;&nbsp;
-    <span class="units">
-      <span class="mr-2">{{item.quantity}}/{{item.units}}</span>
-      <input type="checkbox" [checked]="item.bought" (change)="changeBoughtStatus(item.key, item.bought)">
-    </span>
-  </li>
-</ul>
 <div class="text-center">
-  <span class="badge badge-pill badge-secondary d-inline-block mt-2 w-75" (click)="showAddIngredient()">+ add ingredient</span>
+  <span class="badge badge-pill badge-secondary d-inline-block my-2 w-75" (click)="showAddIngredient()">+ add ingredient</span>
 </div>
+<ul class="list-group list-unstyled bg-white text-dark mx-auto">
+  <ng-container *ngFor="let item of myIngredients | async">
+    <li class="list-group-item" [ngClass]="{'list-group-item-success': item.bought}">
+      <a class="badge badge-danger text-light" (click)="removeIngredient(item.key)">X</a>&nbsp;
+      <span class="ingredient">{{item.title}}</span>&nbsp;&nbsp;
+      <span class="units">
+        <span class="mr-2">{{item.quantity}}/{{item.units}}</span>
+        <input type="checkbox" [checked]="item.bought" (change)="changeBoughtStatus(item.key, item.bought)">
+      </span>
+    </li>
+  </ng-container>
+</ul>
