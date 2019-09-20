@@ -17,6 +17,7 @@ export class AuthService {
 
   myAuthState: any;
   currentUserID: any;
+  currentUserEmail: any;
 
   doGoogleLogin() {
     return new Promise<any>((resolve, reject) => {
@@ -36,7 +37,9 @@ export class AuthService {
       this.myAuthState = this.af.authState.subscribe(user => {
         if (user) {
           this.currentUserID = this.af.auth.currentUser.uid;
+          this.currentUserEmail = this.af.auth.currentUser.email;
           localStorage.setItem('currentUserID', this.currentUserID);
+          localStorage.setItem('currentUserEmail', this.currentUserEmail);
         };
       });
 
@@ -57,7 +60,9 @@ export class AuthService {
         this.myAuthState = this.af.authState.subscribe(user => {
           if (user) {
             this.currentUserID = this.af.auth.currentUser.uid;
+            this.currentUserEmail = this.af.auth.currentUser.email;
             localStorage.setItem('currentUserID', this.currentUserID);
+            localStorage.setItem('currentUserEmail', this.currentUserEmail);
           };
         });
 
@@ -67,7 +72,10 @@ export class AuthService {
     this.myAuthState = this.af.authState.subscribe(user => {
       if (user) {
         this.currentUserID = this.af.auth.currentUser.uid;
+        this.currentUserEmail = this.af.auth.currentUser.email;
         localStorage.setItem('currentUserID', this.currentUserID);
+        localStorage.setItem('currentUserEmail', this.currentUserEmail);
+        user.sendEmailVerification();
       };
     });
     return this.af.auth
@@ -77,17 +85,23 @@ export class AuthService {
     this.myAuthState = this.af.authState.subscribe(user => {
       if (user) {
         this.currentUserID = this.af.auth.currentUser.uid;
+        this.currentUserEmail = this.af.auth.currentUser.email;
         localStorage.setItem('currentUserID', this.currentUserID);
+        localStorage.setItem('currentUserEmail', this.currentUserEmail);
       };
     });
     return this.af.auth
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email, password);
   }
-
+  doPasswordReset(email:string){
+    return this.af.auth
+    .sendPasswordResetEmail(email)
+  }
   logout() {
     if (this.myAuthState) {
       this.myAuthState.unsubscribe();
     };
+    localStorage.clear();
     return this.af.auth.signOut();
   };
 

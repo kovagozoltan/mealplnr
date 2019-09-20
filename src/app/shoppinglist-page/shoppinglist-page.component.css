@@ -10,6 +10,12 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
+#filter{
+    color: #384493;
+}
+#filter .form-control{
+    width: auto;
+}
 .list-group .ingredient{
     font-weight: 600;
 }

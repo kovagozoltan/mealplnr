@@ -22,17 +22,25 @@
     background: transparent;
     border-radius: 20px;
     width: 100px;
-    /*height: 20px;*/
     font-size: 1em;
     line-height: 1em;
 }
 .loginButton.first {
     margin-top: 140px;
 }
-#loginForm .first, #signUpForm .first{
+#passwordResetForm .loginButton{
+    width: 180px;
+}
+#loginForm .first{
     margin-top:120px;
 }
-#loginForm input, #signUpForm input {
+#signUpForm .first{
+    margin-top: 100px;
+}
+#passwordResetForm .first{
+    margin-top: 160px;
+}
+#loginForm input, #signUpForm input, #passwordResetForm input {
     background: transparent;
     color: white;
     outline: none;

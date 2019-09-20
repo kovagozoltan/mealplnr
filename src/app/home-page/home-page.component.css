@@ -28,7 +28,7 @@
     background-size: contain;
 }
 .menuButton.first {
-    margin-top: 140px;
+    margin-top: 100px;
 }
 #weeklyplan{
     background-image: url("../assets/img/calendar.png")
@@ -52,4 +52,55 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+}
+#settings{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    text-decoration: none;
+    width: 30px;
+    height: 25px;
+    text-align: right;
+    background-image: url("../assets/img/settings.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    z-index: 2;
+}
+#sidePanelContainer{
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+#sidePanelContent{
+    position: relative;
+    background: rgba(63, 0, 81);
+    width: 60vw;
+    height: 100vh;
+    left: 100%;
+    top: 0;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    padding-top: 100%;
+    text-align: center;
+}
+#sidePanelContainer.slideIn{
+    z-index: 1;
+}
+#sidePanelContent.slideIn {
+    left: 0;
+}
+#sidePanelContent .position-absolute{
+    bottom:0;
+}
+#sidePanelContent .position-absolute p {
+    font-size: 0.8em;
+}
+#sidePanelContent > button{
+    background: transparent;
+    width: 100%;
 }

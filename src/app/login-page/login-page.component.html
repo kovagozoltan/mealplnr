@@ -10,28 +10,43 @@
         <span class="font-weight-light" id="com">.com</span>
       </span>
     </h1>
-    <div id="loginButtons" *ngIf="!showLogin && !showSignup">
+    <div id="loginButtons" *ngIf="!showLogin && !showSignup && !showPasswordReset">
       <button class="btn border loginButton text-white d-block mb-3 mx-auto first" id="loginWithEmail" (click)="showLogin = !showLogin">email</button>
       <button class="btn border loginButton text-white d-block mb-3 mx-auto" id="loginWithGoogle" (click)="googleLogin()">google</button>
       <button class="btn border loginButton text-white d-block mb-3 mx-auto" id="loginWithFacebook" (click)="facebookLogin()">facebook</button>
     </div>
     <div id="loginForm" *ngIf="showLogin" class="position-relative">
+      <div>
         <p class="errorMessage">{{errorMessage}}</p>
         <input type="email" placeholder="email" name="email" required [(ngModel)]="email" class="first mx-auto" >
         <input type="password" placeholder="password" name="password" required [(ngModel)]="password" class="mx-auto mt-2">
         <button (click)="emailLogin()" [disabled]="!email || !password" class="btn border loginButton text-white mx-auto mt-3">Login</button>
         <div class="mx-auto mt-2 row">
-          <p class="col" (click)="showLogin = !showLogin">back</p><p class="col" (click)="showSignup = !showSignup; showLogin = !showLogin">sign up</p>
+          <p class="col mb-0" (click)="showLogin = !showLogin">back</p><p class="col mb-0" (click)="showSignup = !showSignup; showLogin = !showLogin">sign up</p>
         </div>
+        <div class="small" (click)="showPasswordReset = !showPasswordReset; showLogin = !showLogin">forgot password?</div>
+      </div>
     </div>
+
     <div id="signUpForm" *ngIf="showSignup" class="position-relative">
         <p class="errorMessage">{{errorMessage}}</p>
         <input type="email" placeholder="email" name="email" required [(ngModel)]="email" class="first mx-auto">
         <input type="password" placeholder="password" name="password" required [(ngModel)]="password" class="mx-auto mt-2">
+        <input type="password" placeholder="confirm password" name="confirmPassword" required [(ngModel)]="confirmPassword" class="mx-auto mt-2">
         <button (click)="emailSignup()" [disabled]="!email || !password" class="btn border loginButton text-white mx-auto mt-3">Signup</button>
         <div class="mx-auto mt-2 row">
           <p class="col" (click)="showSignup = !showSignup; showLogin = !showLogin">back</p>
         </div>
     </div>
+
+    <div id="passwordResetForm" *ngIf="showPasswordReset" class="position-relative">
+        <p class="errorMessage">{{errorMessage}}</p>
+        <input type="email" placeholder="email" name="email" required [(ngModel)]="email" class="first mx-auto" >
+        <button (click)="passwordReset()" [disabled]="!email" class="btn border loginButton text-white mx-auto mt-3">Send Password Reset</button>
+        <div class="mx-auto mt-2 row">
+          <p class="col mb-0" (click)="showPasswordReset = !showPasswordReset; showLogin = !showLogin">back</p>
+        </div>
+    </div>
+
   </div>
 </div>
