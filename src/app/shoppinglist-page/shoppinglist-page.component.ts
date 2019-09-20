@@ -18,6 +18,8 @@ export class ShoppinglistPageComponent implements OnInit {
   units;
   filterBy;
 
+  none;
+
   constructor(private authService: AuthService, public db: AngularFireDatabase) { }
  
   ngOnInit() {
@@ -30,8 +32,8 @@ export class ShoppinglistPageComponent implements OnInit {
         this.currentPlan = childSnapshot.val()['key']
       })
       this.myIngredients = this.db.list("/shoppinglist/" + this.currentPlan, ref => {
-        let q = ref.orderByChild('title')
-        return q;
+        let q = ref.orderByChild("needToBuy").equalTo(true);
+        return q; 
       }).valueChanges()
     })
   }
@@ -40,7 +42,7 @@ export class ShoppinglistPageComponent implements OnInit {
     this.db.database.ref("/shoppinglist").child(this.currentPlan).child(item).update({'bought': boughtStatus});
   }
   removeIngredient(key){
-    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(key).ref.remove()
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(key).update({'needToBuy': false});
   }
   showAddIngredient(){
     this.showHideOverlay = 'show';
@@ -55,7 +57,8 @@ export class ShoppinglistPageComponent implements OnInit {
         'quantity': this.quantityToAdd,
         'units': this.units,
         'key': key,
-        'bought': false
+        'bought': false,
+        'needToBuy': true
       })
       this.ingredientToAdd = null;
       this.quantityToAdd = 1;

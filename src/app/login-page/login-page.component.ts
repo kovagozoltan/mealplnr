@@ -15,8 +15,11 @@ export class LoginPageComponent implements OnInit {
   email: string;
   password: string;
   confirmPassword: string;
-
   errorMessage: string;
+  showLogin;
+  showSignup;
+  showPasswordReset;
+  
 
   constructor(public authService: AuthService, private router: Router) { }
 

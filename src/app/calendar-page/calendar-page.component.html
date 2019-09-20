@@ -61,7 +61,7 @@
 <ul class="list-group">
   <li *ngFor="let recipe of myRecipes | async" class="list-group-item row m-0 p-0 border-0">
     <div class="bg-white position-relative">
-      <div class="d-inline-block m-3">
+      <div class="d-inline-block m-3 w-75">
         <h1 class="font-weight-bold">
           {{recipe.title}}
         </h1>
@@ -107,7 +107,9 @@
             <a class="badge badge-danger text-light" (click)="removeIngredient(item.key, recipe.key)">X</a>&nbsp;
             <span class="ingredient d-inline-block">{{item.title}}</span>
           </div>
-          <a class="badge badge-info" (click)="needToBuy(item.key)">need to buy</a>
+          <button class="btn badge badge-info" (click)="needToBuy(item.key, item.needToBuy)" *ngIf="!item.needToBuy || item.needToBuy == false">need to buy</button>
+          <button class="btn badge badge-info" (click)="doNotNeedToBuy(item.key, item.needToBuy)" *ngIf="item.needToBuy == true && item.bought == false">remove from shoppinglist</button>
+          <button class="btn badge badge-success" *ngIf="item.bought == true">already bought</button>
           <span class="units">{{item.quantity}}/{{item.units}}</span>
         </li>
       </ng-container>

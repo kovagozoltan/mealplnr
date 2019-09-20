@@ -4,7 +4,8 @@ import { AuthService } from '../providers/auth.service';
 import { AngularFireDatabase } from 'angularfire2/database';
 
 
-import { Observable } from "rxjs";
+//import { Observable } from "rxjs";
+//import { Z_DEFAULT_STRATEGY } from 'zlib';
 
 @Component({
   selector: 'app-home-page',
@@ -61,7 +62,7 @@ export class HomePageComponent implements OnInit {
     (snapshot) => {
       snapshot.forEach(childSnapshot => {
         this.currentPlan = childSnapshot.val()['key']
-        if (window.confirm('Are sure you want reset your weekly plan?')) {
+        if (window.confirm('Are sure you want reset your weekly plan? This will remove all meals from your calendar and remove all items from your shopping list.')) {
           // remove recipe from whole currentPlan node
           this.db.database.ref("/recipes").child(this.currentPlan).remove();
           // remove ingredients from whole currentPlan node
@@ -69,7 +70,23 @@ export class HomePageComponent implements OnInit {
         }
       })
     })
-
+  }
+  resetShoppingList() {
+    this.db.database.ref("/plans").child(this.currentUserID).orderByChild("user").equalTo(this.currentUserID).once("value",
+    (snapshot) => {
+      snapshot.forEach(childSnapshot => {
+        this.currentPlan = childSnapshot.val()['key']
+        if (window.confirm('Are sure you want reset your soppinglist? This will remove all items from your shopping list.')) {
+          // remove ingredients from whole currentPlan node
+          this.db.database.ref("/shoppinglist").child(this.currentPlan).once("value",
+        (snapshot) => {
+         snapshot.forEach(childSnapshot => {
+           childSnapshot.ref.update({'needToBuy': false});
+         })
+        })
+        }
+      })
+    })
   }
   logout() {
     this.authService.logout();

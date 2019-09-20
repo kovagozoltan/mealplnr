@@ -29,6 +29,10 @@ export class FavouritesComponent implements OnInit {
   hideIngredients:any = {};
   hideMealMenu:any = {};
 
+  none;
+  show;
+  dayToAddTo;
+
   constructor(private authService: AuthService, public db: AngularFireDatabase) { }
 
   ngOnInit() {

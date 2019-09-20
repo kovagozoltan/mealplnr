@@ -22,9 +22,7 @@ export class InviteComponent implements OnInit {
   ngOnInit() {
     this.currentUserID = localStorage.getItem('currentUserID')
     this.currentUserEmail = localStorage.getItem('currentUserEmail')
-
     this.myInvitations = this.db.list("/pendingInvitations/" + this.currentUserID).valueChanges()
-
   }
 
   invite(userEmail) {
@@ -56,9 +54,8 @@ export class InviteComponent implements OnInit {
       this.errorMessage = "please don't try to invite yourself";
     }
   }
-
   acceptInvitation(key) {
-    if (window.confirm('Accepting the invitation, you will lose already saved data.')) {
+    if (window.confirm('By accepting this invitation, you will lose all your saved data and join a different meal plan.')) {
       this.db.database.ref("/plans").child(this.currentUserID).remove()
       this.db.database.ref("/plans").child(this.currentUserID).child(key).set({
         'key': key,
@@ -67,5 +64,4 @@ export class InviteComponent implements OnInit {
       this.db.database.ref("/pendingInvitations").child(this.currentUserID).child(key).remove();
     }
   }
-
 }

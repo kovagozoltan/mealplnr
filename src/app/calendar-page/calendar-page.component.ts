@@ -30,6 +30,8 @@ export class CalendarPageComponent implements OnInit {
   hideIngredients:any = {};
   hideMealMenu:any = {};
 
+  none;
+  
   constructor(private authService: AuthService, public db: AngularFireDatabase) { }
 
   ngOnInit() {
@@ -77,6 +79,7 @@ export class CalendarPageComponent implements OnInit {
     }
   }
   removeRecipe(key) {
+    if(window.confirm("Delete meal from current day?")){
     // remove recipe from curent user, that has id of
     this.db.database.ref("/recipes").child(this.currentPlan).child(key).remove();
     // remove ingredient from shopping list, from current user that matches the recipe removed ^^
@@ -88,6 +91,7 @@ export class CalendarPageComponent implements OnInit {
       })
     this.noteToAdd = null;
   }
+}
   showAddIngredient(key) {
     this.showHideOverlay = 'show';
     this.showHideAddIngredient = 'show';
@@ -136,6 +140,19 @@ export class CalendarPageComponent implements OnInit {
       value = value - 1;
       this.db.database.ref("/recipes").child(this.currentPlan).child(recipeKey).update({"ingredientNumber": value})
     })
+  }
+  needToBuy(itemKey, itemNeedToBuy){
+    let needToBuyStatus
+    if(!itemNeedToBuy){
+      needToBuyStatus = true
+    } else {
+      needToBuyStatus = !itemNeedToBuy;
+    }
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(itemKey).update({'needToBuy': needToBuyStatus});
+  }
+  doNotNeedToBuy(itemKey, itemNeedToBuy){
+    let needToBuyStatus = !itemNeedToBuy;
+    this.db.database.ref("/shoppinglist").child(this.currentPlan).child(itemKey).update({'needToBuy': needToBuyStatus});
   }
   addToFavourites(key) {
     //show toast message that recipe was added to favs

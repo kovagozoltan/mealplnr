@@ -11,7 +11,7 @@
             <br>
             <span>
                 <span class="font-weight-light" id="plnr">plnr</span>
-                <span class="font-weight-light" id="com">.com</span>
+                <!-- <span class="font-weight-light" id="com">.com</span> -->
             </span>
         </h1>
         <p class="mt-3 small text-secondary" *ngIf="!emailVerified">please verify your email</p>
@@ -24,6 +24,7 @@
     <div id="sidePanelContent" [ngClass]="{'slideIn': showSidePanel}" >
         <button routerLink="invite" class="btn btn-sm text-white mb-3">meal plan sharing</button>
         <button class="btn btn-sm text-white mb-3" (click)="resetWeeklyPlan()">reset weekly plan</button>
+        <button class="btn btn-sm text-white mb-3" (click)="resetShoppingList()">reset shopping list</button>
         <button class="btn btn-sm text-white mb-3">about mealplnr.com</button>
         <div class="position-absolute w-100 mb-2">
             <p class="m-0">

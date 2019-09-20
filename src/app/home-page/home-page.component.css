@@ -102,4 +102,5 @@
 }
 #sidePanelContent > button{
     background: transparent;
+    width: 100%;
 }
